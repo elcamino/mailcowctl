@@ -126,6 +126,13 @@ func renderTable(w io.Writer, value any) error {
 		}
 	case client.Fwdhost:
 		return renderTable(w, []client.Fwdhost{v})
+	case []client.Resource:
+		fmt.Fprintln(tw, "ID\tDESCRIPTION\tDOMAIN\tKIND\tMULTIPLE-BOOKINGS\tACTIVE")
+		for _, r := range v {
+			fmt.Fprintf(tw, "%d\t%s\t%s\t%s\t%v\t%v\n", r.ID, r.Description, r.Domain, r.Kind, r.MultipleBookings, r.Active)
+		}
+	case client.Resource:
+		return renderTable(w, []client.Resource{v})
 	default:
 		return json.NewEncoder(w).Encode(value)
 	}
