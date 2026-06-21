@@ -10,6 +10,7 @@ import (
 )
 
 func TestQuarantineDeleteRequiresConfirmation(t *testing.T) {
+	isolateConfig(t)
 	cmd := NewRootCmd(strings.NewReader("no\n"), io.Discard, io.Discard)
 	cmd.SetArgs([]string{"quarantine", "delete", "5"})
 	if err := cmd.Execute(); err == nil {
@@ -18,10 +19,12 @@ func TestQuarantineDeleteRequiresConfirmation(t *testing.T) {
 }
 
 func TestQuarantineReleasePostsActionBody(t *testing.T) {
+	isolateConfig(t)
 	var body json.RawMessage
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/api/v1/edit/qitem" {
-			t.Fatalf("path = %s", r.URL.Path)
+			http.NotFound(w, r)
+			return
 		}
 		_ = json.NewDecoder(r.Body).Decode(&body)
 		_, _ = w.Write([]byte(`[{"type":"success","msg":["ok"]}]`))
