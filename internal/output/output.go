@@ -49,8 +49,22 @@ func renderTable(w io.Writer, value any) error {
 		}
 	case client.Alias:
 		return renderTable(w, []client.Alias{v})
+	case []client.Dkim:
+		fmt.Fprintln(tw, "DOMAIN\tSELECTOR\tLENGTH\tDNS-TXT")
+		for _, d := range v {
+			fmt.Fprintf(tw, "%s\t%s\t%s\t%s\n", d.Domain, d.Selector, d.Length, truncate(d.DkimTxt, 50))
+		}
+	case client.Dkim:
+		return renderTable(w, []client.Dkim{v})
 	default:
 		return json.NewEncoder(w).Encode(value)
 	}
 	return tw.Flush()
+}
+
+func truncate(s string, max int) string {
+	if len(s) <= max {
+		return s
+	}
+	return s[:max] + "..."
 }
