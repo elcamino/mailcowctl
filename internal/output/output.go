@@ -91,6 +91,13 @@ func renderTable(w io.Writer, value any) error {
 		}
 	case client.Transport:
 		return renderTable(w, []client.Transport{v})
+	case []client.Bcc:
+		fmt.Fprintln(tw, "ID\tTYPE\tLOCAL-DEST\tBCC-DEST\tACTIVE")
+		for _, b := range v {
+			fmt.Fprintf(tw, "%d\t%s\t%s\t%s\t%v\n", b.ID, b.Type, b.LocalDest, b.BccDest, b.Active)
+		}
+	case client.Bcc:
+		return renderTable(w, []client.Bcc{v})
 	default:
 		return json.NewEncoder(w).Encode(value)
 	}
