@@ -318,6 +318,20 @@ func (c *Client) getOne(ctx context.Context, path string, out any) error {
 	return json.Unmarshal(arr[0], out)
 }
 
+func (c *Client) getList(ctx context.Context, path string, out any) error {
+	data, err := c.do(ctx, http.MethodGet, path, nil)
+	if err != nil {
+		return err
+	}
+	trimmed := bytes.TrimSpace(data)
+	if len(trimmed) == 0 || bytes.Equal(trimmed, []byte("{}")) || bytes.Equal(trimmed, []byte("null")) {
+		return json.Unmarshal([]byte("[]"), out)
+	}
+	dec := json.NewDecoder(bytes.NewReader(data))
+	dec.UseNumber()
+	return dec.Decode(out)
+}
+
 func (c *Client) postAction(ctx context.Context, path string, body any) error {
 	data, err := c.do(ctx, http.MethodPost, path, body)
 	if err != nil {
