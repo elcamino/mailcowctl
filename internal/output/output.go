@@ -98,6 +98,13 @@ func renderTable(w io.Writer, value any) error {
 		}
 	case client.Bcc:
 		return renderTable(w, []client.Bcc{v})
+	case []client.RecipientMap:
+		fmt.Fprintln(tw, "ID\tOLD\tNEW\tACTIVE")
+		for _, m := range v {
+			fmt.Fprintf(tw, "%d\t%s\t%s\t%v\n", m.ID, m.Old, m.New, m.Active)
+		}
+	case client.RecipientMap:
+		return renderTable(w, []client.RecipientMap{v})
 	default:
 		return json.NewEncoder(w).Encode(value)
 	}
