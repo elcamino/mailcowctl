@@ -70,6 +70,13 @@ func renderTable(w io.Writer, value any) error {
 		}
 	case client.AppPassword:
 		return renderTable(w, []client.AppPassword{v})
+	case []client.Filter:
+		fmt.Fprintln(tw, "ID\tMAILBOX\tDESC\tTYPE\tACTIVE")
+		for _, f := range v {
+			fmt.Fprintf(tw, "%d\t%s\t%s\t%s\t%v\n", f.ID, f.Username, f.ScriptDesc, f.FilterType, f.Active)
+		}
+	case client.Filter:
+		return renderTable(w, []client.Filter{v})
 	default:
 		return json.NewEncoder(w).Encode(value)
 	}

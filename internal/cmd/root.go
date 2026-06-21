@@ -64,6 +64,7 @@ func NewRootCmd(in io.Reader, out, errOut io.Writer) *cobra.Command {
 	root.AddCommand(newDkimCmd(opts))
 	root.AddCommand(newSyncjobCmd(opts))
 	root.AddCommand(newApppassCmd(opts))
+	root.AddCommand(newFilterCmd(opts))
 	root.AddCommand(newConfigCmd(opts))
 	root.AddCommand(newCompletionCmd(root))
 	return root

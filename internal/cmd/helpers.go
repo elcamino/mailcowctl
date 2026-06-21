@@ -70,6 +70,28 @@ func passwordFromFlags(cmd *cobra.Command, in io.Reader, passwordEnv string, pas
 	}
 }
 
+func scriptFromFlags(in io.Reader, scriptFile string, scriptStdin bool) (string, error) {
+	if scriptFile != "" && scriptStdin {
+		return "", errors.New("--script-file and --script-stdin cannot be used together")
+	}
+	switch {
+	case scriptFile != "":
+		data, err := os.ReadFile(scriptFile)
+		if err != nil {
+			return "", err
+		}
+		return string(data), nil
+	case scriptStdin:
+		data, err := io.ReadAll(in)
+		if err != nil {
+			return "", err
+		}
+		return string(data), nil
+	default:
+		return "", errors.New("a sieve script is required; use --script-file or --script-stdin")
+	}
+}
+
 var getenv = os.Getenv
 
 func splitMailbox(address string) (string, string, error) {
