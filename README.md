@@ -95,6 +95,19 @@ edit for these resources).
   string, not a numeric id: `get` and `delete` take the host.
 - `resource list|get|create|delete` -- calendar resources (`--kind location|group|thing`).
 
+## Phase 3 quarantine commands
+
+- `quarantine list [--rcpt <addr>]` -- list held mail, optionally filtered by recipient.
+- `quarantine get <id>` -- show one quarantined item.
+- `quarantine release <id>` -- deliver a held message.
+- `quarantine learn-ham <id>` -- deliver a held message and train the spam filter.
+- `quarantine delete <id>` -- purge a held item (requires --yes).
+
+Quarantine is operational state, not migration state -- it is not part of a
+server-to-server migration. Release and delete act on live mail; the `qitem`
+item-id encoding should be confirmed against a single disposable item before
+bulk use.
+
 ## Development
 
 ```sh
