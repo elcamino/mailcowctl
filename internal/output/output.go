@@ -105,6 +105,13 @@ func renderTable(w io.Writer, value any) error {
 		}
 	case client.RecipientMap:
 		return renderTable(w, []client.RecipientMap{v})
+	case []client.TlsPolicy:
+		fmt.Fprintln(tw, "ID\tDEST\tPOLICY\tPARAMETERS\tACTIVE")
+		for _, p := range v {
+			fmt.Fprintf(tw, "%d\t%s\t%s\t%s\t%v\n", p.ID, p.Dest, p.Policy, p.Parameters, p.Active)
+		}
+	case client.TlsPolicy:
+		return renderTable(w, []client.TlsPolicy{v})
 	default:
 		return json.NewEncoder(w).Encode(value)
 	}
