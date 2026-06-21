@@ -73,6 +73,7 @@ func NewRootCmd(in io.Reader, out, errOut io.Writer) *cobra.Command {
 	root.AddCommand(newRelayhostCmd(opts))
 	root.AddCommand(newFwdhostCmd(opts))
 	root.AddCommand(newResourceCmd(opts))
+	root.AddCommand(newQuarantineCmd(opts))
 	root.AddCommand(newConfigCmd(opts))
 	root.AddCommand(newCompletionCmd(root))
 	return root

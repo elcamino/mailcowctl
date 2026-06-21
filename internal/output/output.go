@@ -133,6 +133,13 @@ func renderTable(w io.Writer, value any) error {
 		}
 	case client.Resource:
 		return renderTable(w, []client.Resource{v})
+	case []client.QuarantineItem:
+		fmt.Fprintln(tw, "ID\tRCPT\tSENDER\tSUBJECT\tSCORE\tCREATED")
+		for _, q := range v {
+			fmt.Fprintf(tw, "%d\t%s\t%s\t%s\t%v\t%v\n", q.ID, q.Rcpt, q.Sender, truncate(q.Subject, 40), q.Score, q.Created)
+		}
+	case client.QuarantineItem:
+		return renderTable(w, []client.QuarantineItem{v})
 	default:
 		return json.NewEncoder(w).Encode(value)
 	}
