@@ -1,0 +1,19 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go vet ./...
+      - run: go test ./...
+      - run: GOOS=linux GOARCH=amd64 go build -o /tmp/mailcowctl-linux-amd64 .
+      - run: GOOS=linux GOARCH=arm64 go build -o /tmp/mailcowctl-linux-arm64 .
+      - run: GOOS=darwin GOARCH=arm64 go build -o /tmp/mailcowctl-darwin-arm64 .
