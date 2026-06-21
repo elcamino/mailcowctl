@@ -78,6 +78,23 @@ before calling the API.
   exports the full script for re-creation on the new server.
 - `policy list|add|delete` — domain anti-spam allow (wl) / block (bl) lists.
 
+## Phase 2 routing and relay commands
+
+All support list/get/create/delete (no edit -- the mailcow API does not expose
+edit for these resources).
+
+- `transport list|get|create|delete` -- outbound transport maps. Passwords are
+  masked in table output; use `-o json` to export full credentials.
+- `bcc list|get|create|delete` -- BCC maps (`--type sender|rcpt`).
+- `recipient list|get|create|delete` -- recipient rewrite maps.
+- `tlspolicy list|get|create|delete` -- per-destination TLS policy maps.
+- `relayhost list|get|create|delete` -- sender-dependent relay hosts. Passwords
+  are masked in table output; `-o json` exports them (the API returns them in
+  cleartext).
+- `fwdhost list|get|create|delete` -- forwarding hosts. These are keyed by host
+  string, not a numeric id: `get` and `delete` take the host.
+- `resource list|get|create|delete` -- calendar resources (`--kind location|group|thing`).
+
 ## Development
 
 ```sh
