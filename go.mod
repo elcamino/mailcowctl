@@ -1,4 +1,4 @@
-module github.com/tob/mailcowctl
+module github.com/elcamino/mailcowctl
 
 go 1.22
 

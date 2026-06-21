@@ -1,7 +1,14 @@
 # mailcowctl
 
+[![CI](https://github.com/elcamino/mailcowctl/actions/workflows/ci.yml/badge.svg)](https://github.com/elcamino/mailcowctl/actions/workflows/ci.yml)
+[![License: GPL v3 or later](https://img.shields.io/badge/License-GPLv3%2B-blue.svg)](LICENSE.md)
+
 `mailcowctl` is a command-line client for managing a running mailcow instance through its REST API.
-It covers domains, mailboxes, and aliases.
+It covers domains, mailboxes, aliases, and migration-adjacent mailcow resources from scripts or a terminal.
+
+## Install
+
+See [INSTALL.md](INSTALL.md) for release binaries, `go install`, and source builds.
 
 ## Configuration
 
@@ -115,3 +122,15 @@ go test ./...
 go vet ./...
 go build ./...
 ```
+
+## Contributing and Security
+
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before sending changes.
+
+Report vulnerabilities privately using the process in [SECURITY.md](SECURITY.md). Do not open public
+issues for security-sensitive findings.
+
+## License
+
+`mailcowctl` is licensed under the GNU General Public License, version 3 or later. See
+[LICENSE.md](LICENSE.md).

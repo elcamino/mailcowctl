@@ -1,3 +1,8 @@
-/docs
 /mailcowctl
 /migration-inventory.md
+/.gocache
+/bin
+/dist
+/coverage.out
+*.test
+/docs
