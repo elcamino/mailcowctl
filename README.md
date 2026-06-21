@@ -1,6 +1,6 @@
 # mailcowctl
 
-[CI](https://github.com/elcamino/mailcowctl/actions/workflows/ci.yml)
+[![CI](https://github.com/elcamino/mailcowctl/actions/workflows/ci.yml/badge.svg)](https://github.com/elcamino/mailcowctl/actions/workflows/ci.yml)
 [![License: GPL v3 or later](https://img.shields.io/badge/License-GPLv3%2B-blue.svg)](LICENSE.md)
 [![Go Reference](https://pkg.go.dev/badge/github.com/elcamino/mailcowctl.svg)](https://pkg.go.dev/github.com/elcamino/mailcowctl)
 [![Go Report Card](https://goreportcard.com/badge/github.com/elcamino/mailcowctl)](https://goreportcard.com/report/github.com/elcamino/mailcowctl)
