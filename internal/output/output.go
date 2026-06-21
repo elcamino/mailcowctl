@@ -77,6 +77,13 @@ func renderTable(w io.Writer, value any) error {
 		}
 	case client.Filter:
 		return renderTable(w, []client.Filter{v})
+	case []client.PolicyItem:
+		fmt.Fprintln(tw, "PREFID\tKIND\tDOMAIN\tVALUE")
+		for _, p := range v {
+			fmt.Fprintf(tw, "%d\t%s\t%s\t%s\n", p.PrefID, p.Kind, p.Object, p.Value)
+		}
+	case client.PolicyItem:
+		return renderTable(w, []client.PolicyItem{v})
 	default:
 		return json.NewEncoder(w).Encode(value)
 	}
