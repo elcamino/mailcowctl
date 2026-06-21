@@ -62,6 +62,7 @@ func NewRootCmd(in io.Reader, out, errOut io.Writer) *cobra.Command {
 	root.AddCommand(newMailboxCmd(opts))
 	root.AddCommand(newAliasCmd(opts))
 	root.AddCommand(newDkimCmd(opts))
+	root.AddCommand(newSyncjobCmd(opts))
 	root.AddCommand(newConfigCmd(opts))
 	root.AddCommand(newCompletionCmd(root))
 	return root

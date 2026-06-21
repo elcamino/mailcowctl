@@ -86,3 +86,10 @@ func intFlagAttr(cmd *cobra.Command, name string, attrName string, attrs map[str
 		attrs[attrName] = strconv.Itoa(value)
 	}
 }
+
+func stringFlagAttr(cmd *cobra.Command, name string, attrName string, attrs map[string]any) {
+	if cmd.Flags().Changed(name) {
+		value, _ := cmd.Flags().GetString(name)
+		attrs[attrName] = value
+	}
+}

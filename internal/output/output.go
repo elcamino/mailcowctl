@@ -56,6 +56,13 @@ func renderTable(w io.Writer, value any) error {
 		}
 	case client.Dkim:
 		return renderTable(w, []client.Dkim{v})
+	case []client.SyncJob:
+		fmt.Fprintln(tw, "ID\tMAILBOX\tHOST\tUSER1\tINTERVAL\tACTIVE\tLAST-RUN")
+		for _, j := range v {
+			fmt.Fprintf(tw, "%d\t%s\t%s\t%s\t%v\t%v\t%s\n", j.ID, j.Mailbox, j.Host1, j.User1, j.MinsInterval, j.Active, j.LastRun)
+		}
+	case client.SyncJob:
+		return renderTable(w, []client.SyncJob{v})
 	default:
 		return json.NewEncoder(w).Encode(value)
 	}
