@@ -84,6 +84,13 @@ func renderTable(w io.Writer, value any) error {
 		}
 	case client.PolicyItem:
 		return renderTable(w, []client.PolicyItem{v})
+	case []client.Transport:
+		fmt.Fprintln(tw, "ID\tDESTINATION\tNEXTHOP\tUSERNAME\tPASSWORD\tACTIVE")
+		for _, t := range v {
+			fmt.Fprintf(tw, "%d\t%s\t%s\t%s\t%s\t%v\n", t.ID, t.Destination, t.Nexthop, t.Username, maskSecret(t.PasswordShort, t.Password), t.Active)
+		}
+	case client.Transport:
+		return renderTable(w, []client.Transport{v})
 	default:
 		return json.NewEncoder(w).Encode(value)
 	}
