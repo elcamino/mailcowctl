@@ -1,7 +1,12 @@
 # mailcowctl
 
-[![CI](https://github.com/elcamino/mailcowctl/actions/workflows/ci.yml/badge.svg)](https://github.com/elcamino/mailcowctl/actions/workflows/ci.yml)
+[CI](https://github.com/elcamino/mailcowctl/actions/workflows/ci.yml)
 [![License: GPL v3 or later](https://img.shields.io/badge/License-GPLv3%2B-blue.svg)](LICENSE.md)
+[![Go Reference](https://pkg.go.dev/badge/github.com/elcamino/mailcowctl.svg)](https://pkg.go.dev/github.com/elcamino/mailcowctl)
+[![Go Report Card](https://goreportcard.com/badge/github.com/elcamino/mailcowctl)](https://goreportcard.com/report/github.com/elcamino/mailcowctl)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/elcamino/mailcowctl/badge)](https://securityscorecards.dev/viewer/?uri=github.com/elcamino/mailcowctl)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/elcamino/mailcowctl)](go.mod)
+[![Security Policy](https://img.shields.io/badge/security-policy-brightgreen)](SECURITY.md)
 
 `mailcowctl` is a command-line client for managing a running mailcow instance through its REST API.
 It covers domains, mailboxes, aliases, and migration-adjacent mailcow resources from scripts or a terminal.
