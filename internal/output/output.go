@@ -97,3 +97,16 @@ func truncate(s string, max int) string {
 	}
 	return s[:max] + "..."
 }
+
+// maskSecret renders a password column for table output without leaking the
+// full secret: it prefers the API-provided short form, falls back to a fixed
+// mask when a password is set, and is empty otherwise.
+func maskSecret(short, full string) string {
+	if short != "" {
+		return short
+	}
+	if full != "" {
+		return "***"
+	}
+	return ""
+}
