@@ -119,6 +119,13 @@ func renderTable(w io.Writer, value any) error {
 		}
 	case client.Relayhost:
 		return renderTable(w, []client.Relayhost{v})
+	case []client.Fwdhost:
+		fmt.Fprintln(tw, "HOST\tSOURCE\tKEEP-SPAM")
+		for _, h := range v {
+			fmt.Fprintf(tw, "%s\t%s\t%s\n", h.Host, h.Source, h.KeepSpam)
+		}
+	case client.Fwdhost:
+		return renderTable(w, []client.Fwdhost{v})
 	default:
 		return json.NewEncoder(w).Encode(value)
 	}
