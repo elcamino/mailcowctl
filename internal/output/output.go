@@ -63,6 +63,13 @@ func renderTable(w io.Writer, value any) error {
 		}
 	case client.SyncJob:
 		return renderTable(w, []client.SyncJob{v})
+	case []client.AppPassword:
+		fmt.Fprintln(tw, "ID\tMAILBOX\tNAME\tPROTOCOLS\tACTIVE")
+		for _, a := range v {
+			fmt.Fprintf(tw, "%d\t%s\t%s\t%s\t%v\n", a.ID, a.Mailbox, a.Name, a.Protocols(), a.Active)
+		}
+	case client.AppPassword:
+		return renderTable(w, []client.AppPassword{v})
 	default:
 		return json.NewEncoder(w).Encode(value)
 	}
