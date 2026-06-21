@@ -70,6 +70,9 @@ func syncjobCreateCmd(opts *rootOptions) *cobra.Command {
 			if mailbox == "" || host1 == "" || user1 == "" {
 				return fmt.Errorf("--mailbox, --host1, and --user1 are required")
 			}
+			if enc1 != "SSL" && enc1 != "TLS" && enc1 != "PLAIN" {
+				return fmt.Errorf("--enc1 must be SSL, TLS, or PLAIN")
+			}
 			password, err := passwordFromFlags(cmd, opts.in, passwordEnv, passwordStdin)
 			if err != nil {
 				return err
@@ -132,6 +135,12 @@ func syncjobEditCmd(opts *rootOptions) *cobra.Command {
 			attrs := map[string]any{}
 			stringFlagAttr(cmd, "host1", "host1", attrs)
 			stringFlagAttr(cmd, "user1", "user1", attrs)
+			if cmd.Flags().Changed("enc1") {
+				enc1val, _ := cmd.Flags().GetString("enc1")
+				if enc1val != "SSL" && enc1val != "TLS" && enc1val != "PLAIN" {
+					return fmt.Errorf("--enc1 must be SSL, TLS, or PLAIN")
+				}
+			}
 			stringFlagAttr(cmd, "enc1", "enc1", attrs)
 			stringFlagAttr(cmd, "exclude", "exclude", attrs)
 			intFlagAttr(cmd, "port1", "port1", attrs)

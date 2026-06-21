@@ -9,7 +9,7 @@ type Dkim struct {
 	Domain   string `json:"-"`
 	Selector string `json:"dkim_selector,omitempty"`
 	Length   string `json:"length,omitempty"`
-	PrivKey  string `json:"privkey,omitempty"`
+	PrivKey  string `json:"privkey,omitempty"` // always empty: the mailcow API never returns DKIM private keys
 	PubKey   string `json:"pubkey,omitempty"`
 	DkimTxt  string `json:"dkim_txt,omitempty"`
 }

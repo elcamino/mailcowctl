@@ -90,6 +90,7 @@ func renderTable(w io.Writer, value any) error {
 	return tw.Flush()
 }
 
+// truncate slices by bytes and is intended for ASCII content (e.g. DKIM TXT records).
 func truncate(s string, max int) string {
 	if len(s) <= max {
 		return s

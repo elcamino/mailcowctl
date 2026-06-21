@@ -7,6 +7,10 @@ import (
 	"strings"
 )
 
+// AppPassword response field json tags (name, mailbox, and the *_access protocol flags) are
+// based on mailcow's documented column names but have NOT been verified against a live populated
+// response; reconcile these tags against real data during migration. Note: -o json/-o yaml output
+// is unaffected because it echoes raw API keys.
 type AppPassword struct {
 	ID      int    `json:"id"`
 	Name    string `json:"name,omitempty"`
