@@ -63,6 +63,21 @@ mailcowctl alias delete <address|id> --yes
 `alias edit` and `alias delete` accept an address and resolve it to the numeric mailcow alias ID
 before calling the API.
 
+## Phase 1 migration commands
+
+- `dkim get|add|duplicate|delete` — DKIM keys. Private keys are NEVER returned by
+  the mailcow API; `dkim get` shows the public record and (with `--dns`) the DNS
+  TXT line. Migrating DKIM means regenerating keys on the new server and updating
+  each domain's DNS TXT record. `dkim duplicate` only works within one server.
+- `syncjob list|get|create|edit|delete` — mailcow's built-in imapsync jobs; the
+  mechanism to pull mail content from the old server. mailcow runs them on the
+  configured interval (there is no run-now API).
+- `apppass list|get|create|edit|delete` — app passwords. Existing secrets are
+  hashed and cannot be exported; recreate them with new secrets.
+- `filter list|get|create|edit|delete` — sieve filters. `filter get -o json`
+  exports the full script for re-creation on the new server.
+- `policy list|add|delete` — domain anti-spam allow (wl) / block (bl) lists.
+
 ## Development
 
 ```sh
