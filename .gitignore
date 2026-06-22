@@ -1,6 +1,7 @@
 /mailcowctl
 /migration-inventory.md
 /.gocache
+/build
 /bin
 /dist
 /coverage.out
