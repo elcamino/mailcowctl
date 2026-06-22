@@ -36,6 +36,25 @@ profiles:
 mailcow uses the `X-API-Key` header. API keys are IP allow-listed in mailcow, and write commands
 need a read-write key.
 
+### mailcow-dockerized API key
+
+On a `mailcow-dockerized` host, set the API key and allowed source IPs in `mailcow.conf`
+(or in `.env` if running mailcow-dockerized):
+
+```sh
+API_KEY=$(openssl rand -hex 32)
+API_ALLOW_FROM=127.0.0.1,IP1,IP2,...
+```
+
+`API_ALLOW_FROM` must include every client or CI runner source IP that will call the API. After
+changing `mailcow.conf`, restart or recreate the affected mailcow containers according to the
+mailcow-dockerized update/restart procedure. Use the same generated key with `mailcowctl`:
+
+```sh
+export MAILCOW_HOST=https://mail.example.org
+export MAILCOW_API_KEY="$API_KEY"
+```
+
 ## Examples
 
 ```sh
@@ -75,7 +94,7 @@ mailcowctl alias delete <address|id> --yes
 `alias edit` and `alias delete` accept an address and resolve it to the numeric mailcow alias ID
 before calling the API.
 
-## Phase 1 migration commands
+## Mail Migration
 
 - `dkim get|add|duplicate|delete` — DKIM keys. Private keys are NEVER returned by
   the mailcow API; `dkim get` shows the public record and (with `--dns`) the DNS
@@ -90,7 +109,7 @@ before calling the API.
   exports the full script for re-creation on the new server.
 - `policy list|add|delete` — domain anti-spam allow (wl) / block (bl) lists.
 
-## Phase 2 routing and relay commands
+## Routing and Relay
 
 All support list/get/create/delete (no edit -- the mailcow API does not expose
 edit for these resources).
@@ -107,7 +126,7 @@ edit for these resources).
   string, not a numeric id: `get` and `delete` take the host.
 - `resource list|get|create|delete` -- calendar resources (`--kind location|group|thing`).
 
-## Phase 3 quarantine commands
+## Quarantine Operations
 
 - `quarantine list [--rcpt <addr>]` -- list held mail, optionally filtered by recipient.
 - `quarantine get <id>` -- show one quarantined item.
