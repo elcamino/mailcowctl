@@ -13,7 +13,7 @@ It covers domains, mailboxes, aliases, and migration-adjacent mailcow resources 
 
 ## Demo
 
-![mailcowctl demo](https://s3.eu-central-1.wasabisys.com/pubvid/mailcowctl-demo.gif)
+![mailcowctl demo](https://s3.eu-central-1.wasabisys.com/pubvid/mailcowctl-demo.gif?v=2)
 
 ## Install
 
