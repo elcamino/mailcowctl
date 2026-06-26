@@ -21,7 +21,6 @@ package client
 
 import (
 	"context"
-	"fmt"
 	"strings"
 )
 
@@ -57,8 +56,8 @@ type SyncJobCreate struct {
 }
 
 func (c *Client) ListSyncJobs(ctx context.Context, mailbox string) ([]SyncJob, error) {
-	var jobs []SyncJob
-	if err := c.getList(ctx, "/get/syncjobs/all/no_log", &jobs); err != nil {
+	jobs, err := apiList[SyncJob](ctx, c, "/get/syncjobs/all/no_log")
+	if err != nil {
 		return nil, err
 	}
 	if mailbox == "" {
@@ -78,12 +77,7 @@ func (c *Client) GetSyncJob(ctx context.Context, id int) (SyncJob, error) {
 	if err != nil {
 		return SyncJob{}, err
 	}
-	for _, j := range jobs {
-		if j.ID == id {
-			return j, nil
-		}
-	}
-	return SyncJob{}, fmt.Errorf("syncjob %d not found", id)
+	return findByID(jobs, id, func(j SyncJob) int { return j.ID }, "syncjob")
 }
 
 func (c *Client) CreateSyncJob(ctx context.Context, req SyncJobCreate) error {

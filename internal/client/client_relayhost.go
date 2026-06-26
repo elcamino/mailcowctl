@@ -21,7 +21,6 @@ package client
 
 import (
 	"context"
-	"fmt"
 )
 
 type Relayhost struct {
@@ -43,9 +42,7 @@ type RelayhostCreate struct {
 }
 
 func (c *Client) ListRelayhosts(ctx context.Context) ([]Relayhost, error) {
-	var list []Relayhost
-	err := c.getList(ctx, "/get/relayhost/all", &list)
-	return list, err
+	return apiList[Relayhost](ctx, c, "/get/relayhost/all")
 }
 
 func (c *Client) GetRelayhost(ctx context.Context, id int) (Relayhost, error) {
@@ -53,12 +50,7 @@ func (c *Client) GetRelayhost(ctx context.Context, id int) (Relayhost, error) {
 	if err != nil {
 		return Relayhost{}, err
 	}
-	for _, h := range list {
-		if h.ID == id {
-			return h, nil
-		}
-	}
-	return Relayhost{}, fmt.Errorf("relayhost %d not found", id)
+	return findByID(list, id, func(h Relayhost) int { return h.ID }, "relayhost")
 }
 
 func (c *Client) CreateRelayhost(ctx context.Context, req RelayhostCreate) error {

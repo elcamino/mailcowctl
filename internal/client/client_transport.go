@@ -21,7 +21,6 @@ package client
 
 import (
 	"context"
-	"fmt"
 )
 
 type Transport struct {
@@ -43,9 +42,7 @@ type TransportCreate struct {
 }
 
 func (c *Client) ListTransports(ctx context.Context) ([]Transport, error) {
-	var list []Transport
-	err := c.getList(ctx, "/get/transport/all", &list)
-	return list, err
+	return apiList[Transport](ctx, c, "/get/transport/all")
 }
 
 func (c *Client) GetTransport(ctx context.Context, id int) (Transport, error) {
@@ -53,12 +50,7 @@ func (c *Client) GetTransport(ctx context.Context, id int) (Transport, error) {
 	if err != nil {
 		return Transport{}, err
 	}
-	for _, t := range list {
-		if t.ID == id {
-			return t, nil
-		}
-	}
-	return Transport{}, fmt.Errorf("transport %d not found", id)
+	return findByID(list, id, func(t Transport) int { return t.ID }, "transport")
 }
 
 func (c *Client) CreateTransport(ctx context.Context, req TransportCreate) error {

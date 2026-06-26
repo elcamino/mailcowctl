@@ -21,7 +21,6 @@ package client
 
 import (
 	"context"
-	"fmt"
 	"strings"
 )
 
@@ -43,8 +42,8 @@ type FilterCreate struct {
 }
 
 func (c *Client) ListFilters(ctx context.Context, mailbox string) ([]Filter, error) {
-	var list []Filter
-	if err := c.getList(ctx, "/get/filters/all", &list); err != nil {
+	list, err := apiList[Filter](ctx, c, "/get/filters/all")
+	if err != nil {
 		return nil, err
 	}
 	if mailbox == "" {
@@ -64,12 +63,7 @@ func (c *Client) GetFilter(ctx context.Context, id int) (Filter, error) {
 	if err != nil {
 		return Filter{}, err
 	}
-	for _, f := range list {
-		if f.ID == id {
-			return f, nil
-		}
-	}
-	return Filter{}, fmt.Errorf("filter %d not found", id)
+	return findByID(list, id, func(f Filter) int { return f.ID }, "filter")
 }
 
 func (c *Client) CreateFilter(ctx context.Context, req FilterCreate) error {

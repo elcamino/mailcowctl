@@ -21,7 +21,6 @@ package client
 
 import (
 	"context"
-	"fmt"
 	"strings"
 )
 
@@ -39,8 +38,8 @@ type QuarantineItem struct {
 }
 
 func (c *Client) ListQuarantine(ctx context.Context, rcpt string) ([]QuarantineItem, error) {
-	var list []QuarantineItem
-	if err := c.getList(ctx, "/get/quarantine/all", &list); err != nil {
+	list, err := apiList[QuarantineItem](ctx, c, "/get/quarantine/all")
+	if err != nil {
 		return nil, err
 	}
 	if rcpt == "" {
@@ -60,12 +59,7 @@ func (c *Client) GetQuarantine(ctx context.Context, id int) (QuarantineItem, err
 	if err != nil {
 		return QuarantineItem{}, err
 	}
-	for _, q := range list {
-		if q.ID == id {
-			return q, nil
-		}
-	}
-	return QuarantineItem{}, fmt.Errorf("quarantine item %d not found", id)
+	return findByID(list, id, func(q QuarantineItem) int { return q.ID }, "quarantine item")
 }
 
 func (c *Client) quarantineAction(ctx context.Context, id int, action string) error {
