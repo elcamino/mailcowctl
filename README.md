@@ -13,10 +13,7 @@ It covers domains, mailboxes, aliases, and migration-adjacent mailcow resources 
 
 ## Demo
 
-<video controls muted playsinline width="1200">
-  <source src="https://s3.eu-central-1.wasabisys.com/pubvid/mailcowctl-demo.av1.12fps.webm" type="video/webm">
-  <source src="https://s3.eu-central-1.wasabisys.com/pubvid/mailcowctl-demo.12fps.mp4" type="video/mp4">
-</video>
+![mailcowctl demo](https://s3.eu-central-1.wasabisys.com/pubvid/mailcowctl-demo.gif)
 
 ## Install
 

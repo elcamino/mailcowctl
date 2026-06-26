@@ -6,4 +6,6 @@
 /dist
 /coverage.out
 *.test
+/media
 /docs
+/*demo.sh
