@@ -21,7 +21,6 @@ package client
 
 import (
 	"context"
-	"fmt"
 )
 
 type Bcc struct {
@@ -41,9 +40,7 @@ type BccCreate struct {
 }
 
 func (c *Client) ListBccs(ctx context.Context) ([]Bcc, error) {
-	var list []Bcc
-	err := c.getList(ctx, "/get/bcc/all", &list)
-	return list, err
+	return apiList[Bcc](ctx, c, "/get/bcc/all")
 }
 
 func (c *Client) GetBcc(ctx context.Context, id int) (Bcc, error) {
@@ -51,12 +48,7 @@ func (c *Client) GetBcc(ctx context.Context, id int) (Bcc, error) {
 	if err != nil {
 		return Bcc{}, err
 	}
-	for _, b := range list {
-		if b.ID == id {
-			return b, nil
-		}
-	}
-	return Bcc{}, fmt.Errorf("bcc %d not found", id)
+	return findByID(list, id, func(b Bcc) int { return b.ID }, "bcc")
 }
 
 func (c *Client) CreateBcc(ctx context.Context, req BccCreate) error {

@@ -21,7 +21,6 @@ package client
 
 import (
 	"context"
-	"fmt"
 )
 
 type TlsPolicy struct {
@@ -40,9 +39,7 @@ type TlsPolicyCreate struct {
 }
 
 func (c *Client) ListTlsPolicies(ctx context.Context) ([]TlsPolicy, error) {
-	var list []TlsPolicy
-	err := c.getList(ctx, "/get/tls-policy-map/all", &list)
-	return list, err
+	return apiList[TlsPolicy](ctx, c, "/get/tls-policy-map/all")
 }
 
 func (c *Client) GetTlsPolicy(ctx context.Context, id int) (TlsPolicy, error) {
@@ -50,12 +47,7 @@ func (c *Client) GetTlsPolicy(ctx context.Context, id int) (TlsPolicy, error) {
 	if err != nil {
 		return TlsPolicy{}, err
 	}
-	for _, p := range list {
-		if p.ID == id {
-			return p, nil
-		}
-	}
-	return TlsPolicy{}, fmt.Errorf("tls policy %d not found", id)
+	return findByID(list, id, func(p TlsPolicy) int { return p.ID }, "tls policy")
 }
 
 func (c *Client) CreateTlsPolicy(ctx context.Context, req TlsPolicyCreate) error {

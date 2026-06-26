@@ -8,6 +8,15 @@ When releases are published, download the archive for your platform from:
 https://github.com/elcamino/mailcowctl/releases
 ```
 
+Release assets are published as `mailcowctl_<version>_<os>_<arch>.tar.gz` for:
+
+- `linux_amd64`
+- `linux_arm64`
+- `darwin_amd64`
+- `darwin_arm64`
+
+Each release also includes `checksums.txt`.
+
 Install the binary somewhere on your `PATH`, for example:
 
 ```sh
