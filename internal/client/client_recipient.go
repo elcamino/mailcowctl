@@ -21,7 +21,6 @@ package client
 
 import (
 	"context"
-	"fmt"
 )
 
 type RecipientMap struct {
@@ -38,9 +37,7 @@ type RecipientMapCreate struct {
 }
 
 func (c *Client) ListRecipientMaps(ctx context.Context) ([]RecipientMap, error) {
-	var list []RecipientMap
-	err := c.getList(ctx, "/get/recipient_map/all", &list)
-	return list, err
+	return apiList[RecipientMap](ctx, c, "/get/recipient_map/all")
 }
 
 func (c *Client) GetRecipientMap(ctx context.Context, id int) (RecipientMap, error) {
@@ -48,12 +45,7 @@ func (c *Client) GetRecipientMap(ctx context.Context, id int) (RecipientMap, err
 	if err != nil {
 		return RecipientMap{}, err
 	}
-	for _, m := range list {
-		if m.ID == id {
-			return m, nil
-		}
-	}
-	return RecipientMap{}, fmt.Errorf("recipient map %d not found", id)
+	return findByID(list, id, func(m RecipientMap) int { return m.ID }, "recipient map")
 }
 
 func (c *Client) CreateRecipientMap(ctx context.Context, req RecipientMapCreate) error {

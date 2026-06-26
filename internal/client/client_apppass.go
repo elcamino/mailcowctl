@@ -77,9 +77,7 @@ type AppPasswordCreate struct {
 }
 
 func (c *Client) ListAppPasswords(ctx context.Context, mailbox string) ([]AppPassword, error) {
-	var list []AppPassword
-	err := c.getList(ctx, "/get/app-passwd/all/"+url.PathEscape(mailbox), &list)
-	return list, err
+	return apiList[AppPassword](ctx, c, "/get/app-passwd/all/"+url.PathEscape(mailbox))
 }
 
 func (c *Client) GetAppPassword(ctx context.Context, mailbox string, id int) (AppPassword, error) {
@@ -87,12 +85,9 @@ func (c *Client) GetAppPassword(ctx context.Context, mailbox string, id int) (Ap
 	if err != nil {
 		return AppPassword{}, err
 	}
-	for _, a := range list {
-		if a.ID == id {
-			return a, nil
-		}
-	}
-	return AppPassword{}, fmt.Errorf("app password %d not found for %s", id, mailbox)
+	return findFirst(list, func(a AppPassword) bool {
+		return a.ID == id
+	}, fmt.Errorf("app password %d not found for %s", id, mailbox))
 }
 
 func (c *Client) CreateAppPassword(ctx context.Context, req AppPasswordCreate) error {

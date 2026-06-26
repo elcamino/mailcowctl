@@ -1,0 +1,70 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Verify
+        run: |
+          go vet ./...
+          go test ./...
+
+      - name: Build release archives
+        run: |
+          set -euo pipefail
+
+          version="${GITHUB_REF_NAME}"
+          module="github.com/elcamino/mailcowctl"
+          mkdir -p build dist
+
+          targets=(
+            "linux amd64"
+            "linux arm64"
+            "darwin amd64"
+            "darwin arm64"
+          )
+
+          for target in "${targets[@]}"; do
+            read -r goos goarch <<< "${target}"
+            archive_name="mailcowctl_${version}_${goos}_${goarch}"
+            archive_dir="build/${archive_name}"
+            mkdir -p "${archive_dir}"
+
+            CGO_ENABLED=0 GOOS="${goos}" GOARCH="${goarch}" go build \
+              -trimpath \
+              -ldflags "-s -w -X ${module}/internal/cmd.version=${version}" \
+              -o "${archive_dir}/mailcowctl" \
+              .
+
+            cp LICENSE.md README.md "${archive_dir}/"
+            tar -C build -czf "dist/${archive_name}.tar.gz" "${archive_name}"
+          done
+
+          (
+            cd dist
+            sha256sum *.tar.gz > checksums.txt
+          )
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/* \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes \
+            --verify-tag

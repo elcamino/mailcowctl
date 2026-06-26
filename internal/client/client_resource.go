@@ -21,7 +21,6 @@ package client
 
 import (
 	"context"
-	"fmt"
 )
 
 type Resource struct {
@@ -42,9 +41,7 @@ type ResourceCreate struct {
 }
 
 func (c *Client) ListResources(ctx context.Context) ([]Resource, error) {
-	var list []Resource
-	err := c.getList(ctx, "/get/resource/all", &list)
-	return list, err
+	return apiList[Resource](ctx, c, "/get/resource/all")
 }
 
 func (c *Client) GetResource(ctx context.Context, id int) (Resource, error) {
@@ -52,12 +49,7 @@ func (c *Client) GetResource(ctx context.Context, id int) (Resource, error) {
 	if err != nil {
 		return Resource{}, err
 	}
-	for _, r := range list {
-		if r.ID == id {
-			return r, nil
-		}
-	}
-	return Resource{}, fmt.Errorf("resource %d not found", id)
+	return findByID(list, id, func(r Resource) int { return r.ID }, "resource")
 }
 
 func (c *Client) CreateResource(ctx context.Context, req ResourceCreate) error {

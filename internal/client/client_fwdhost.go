@@ -37,9 +37,7 @@ type FwdhostCreate struct {
 }
 
 func (c *Client) ListFwdhosts(ctx context.Context) ([]Fwdhost, error) {
-	var list []Fwdhost
-	err := c.getList(ctx, "/get/fwdhost/all", &list)
-	return list, err
+	return apiList[Fwdhost](ctx, c, "/get/fwdhost/all")
 }
 
 func (c *Client) GetFwdhost(ctx context.Context, host string) (Fwdhost, error) {
@@ -47,12 +45,9 @@ func (c *Client) GetFwdhost(ctx context.Context, host string) (Fwdhost, error) {
 	if err != nil {
 		return Fwdhost{}, err
 	}
-	for _, h := range list {
-		if strings.EqualFold(h.Host, host) || strings.EqualFold(h.Source, host) {
-			return h, nil
-		}
-	}
-	return Fwdhost{}, fmt.Errorf("fwdhost %q not found", host)
+	return findFirst(list, func(h Fwdhost) bool {
+		return strings.EqualFold(h.Host, host) || strings.EqualFold(h.Source, host)
+	}, fmt.Errorf("fwdhost %q not found", host))
 }
 
 func (c *Client) CreateFwdhost(ctx context.Context, req FwdhostCreate) error {
